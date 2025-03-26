@@ -2,5 +2,10 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+remappings = [
+    "@contractlevel/compliance=lib/compliance",
+    "@chainlink/contracts=lib/compliance/lib/chainlink/contracts",
+    "@openzeppelin/contracts=lib/compliance/lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts",
+]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

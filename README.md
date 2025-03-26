@@ -1,66 +1,28 @@
-## Foundry
+# Contract Level DID
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This project is an entry for the [Cheqd Verifiable AI Hackathon 2025](https://dorahacks.io/hackathon/cheqd-verifiable-ai/ideaism), and demonstrates how to mint an onchain DID (Decentralized Identifier) with [Cheqd](https://docs.cheqd.io/product/studio/dids/create-did) through [Chainlink Functions](https://chain.link/functions) for users who have completed Sybil-resistant KYC with a licensed entity through [Contract Level Compliance](https://github.com/contractlevel/compliance).
 
-Foundry consists of:
+## Chainlink Functions Secrets
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+The following will upload the `CHEQD_API_KEY` in a `.env` file, that will be hosted by the DON for 24 hours.
 
-## Documentation
-
-https://book.getfoundry.sh/
+```
+node functions/uploadSecrets.js
+```
 
 ## Usage
 
-### Build
+The onchain entry point into the system is `DIDRequestManager::requestCompliantStatus()`.
 
-```shell
-$ forge build
+1. User must approve the `DIDRequestManager` to spend LINK tokens, covering the fee of Contract Level Compliance.
+2. The system will then check the compliance status of the user - if they have completed Sybil-resistant KYC with a licensed entity:
+3. A callback will automatically be made, calling the Cheqd API via Chainlink Functions to create a new DID.
+4. Chainlink Functions will then return the response, minting a unique onchain NFT, representing the Cheqd DID to the compliant user.
+
+## Testing
+
+Run unit tests with:
+
 ```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+forge test --mt test_did
 ```
