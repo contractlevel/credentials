@@ -6,6 +6,7 @@ import {Test, Vm, console2} from "forge-std/Test.sol";
 import {DIDRequestManager} from "../src/DIDRequestManager.sol";
 import {LevelDID, ILevelDID} from "../src/LevelDID.sol";
 import {HelperConfig} from "../script/HelperConfig.s.sol";
+import {DeployDID} from "../script/DeployDID.s.sol";
 
 import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
 import {IFunctionsSubscriptions} from
@@ -22,8 +23,9 @@ contract BaseTest is Test {
 
     uint256 public ethSepoliaFork;
 
-    DIDRequestManager public manager;
     LevelDID public did;
+    DIDRequestManager public manager;
+    HelperConfig public config;
     address public clcRouter;
     address public clfRouter;
     address public link;
@@ -41,19 +43,16 @@ contract BaseTest is Test {
         /// @dev fork sepolia
         ethSepoliaFork = vm.createSelectFork(vm.envString("ETH_SEPOLIA_RPC_URL"));
 
+        /// @dev run deploy script
+        DeployDID deploy = new DeployDID();
+        (did, manager, config) = deploy.run();
+
         /// @dev get constructor args from helper config
-        HelperConfig config = new HelperConfig();
         (clcRouter, clfRouter, link, donId, clfSubId, donHostedSecretsSlotId, clfSecretsVersion) =
             config.activeNetworkConfig();
 
-        /// @dev deploy LevelDID
-        did = new LevelDID();
-        /// @dev deploy DIDRequestManager
-        manager = new DIDRequestManager(
-            address(did), clcRouter, clfRouter, link, donId, clfSubId, donHostedSecretsSlotId, clfSecretsVersion
-        );
-        /// @dev set manager to DID owner
-        did.transferOwnership(address(manager));
+        /// @dev assert script correctly transferred ownership of did to manager
+        assertEq(did.owner(), address(manager));
 
         /// @dev add consumer to CLF subscription
         vm.prank(vm.envAddress("DEPLOYER_PUBLIC_ADDRESS"));
