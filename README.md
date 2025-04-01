@@ -15,9 +15,10 @@ node functions/uploadSecrets.js
 The onchain entry point into the system is `DIDRequestManager::requestCompliantStatus()`.
 
 1. User must approve the `DIDRequestManager` to spend LINK tokens, covering the fee of Contract Level Compliance.
-2. The system will then check the compliance status of the user - if they have completed Sybil-resistant KYC with a licensed entity:
-3. A callback will automatically be made, calling the Cheqd API via Chainlink Functions to create a new DID.
-4. Chainlink Functions will then return the response, minting a unique onchain NFT, representing the Cheqd DID to the compliant user.
+2. User must pass the Cheqd DID identifier string when calling `DIDRequestManager::requestCompliantStatus()`.
+3. The system will then check the compliance status of the user - if they have completed Sybil-resistant KYC with a licensed entity:
+4. A callback will automatically be made, calling the Cheqd API via Chainlink Functions to fetch data about a DID.
+5. Chainlink Functions will then return the response, minting a unique onchain NFT, representing the Cheqd DID to the compliant user, with the DID's associated public key as the `tokenURI`.
 
 ## Testing
 
@@ -29,8 +30,14 @@ forge test --mt test_did
 
 ## Deployments (Eth Sepolia)
 
-[DIDRequestManager](https://sepolia.etherscan.io/address/0x3fad1b42b710ee9ECe30cdBC900Fd095366579cE#code)
+[DIDRequestManager](https://sepolia.etherscan.io/address/0x4386a5535101c255fc6f246e8dfef75a180839df#code)
 
-[LevelDID](https://sepolia.etherscan.io/address/0xE4C1292B13CF51B0ce678195E8069f2F3AF56ea7#code)
+[LevelDID](https://sepolia.etherscan.io/address/0x3251fa43986c9c7d2d9797ec15f4fb2860172314#code)
 
-[requestCompliantStatus tx](https://sepolia.etherscan.io/tx/0x72e617d53c64dca754cb2dfc8e3e1d62b896c44c326691f6aec35d8ad691f176)
+[requestCompliantStatus tx](https://sepolia.etherscan.io/tx/0xe59cc44450c0a0cddabe0e3bba501ae4b453dc6afd746ffd1092da27fb723998)
+
+[mintDID tx](https://sepolia.etherscan.io/tx/0xfab1f1e721164cb05b6776fcdf01e06e58bab5994626b2af98af598a6f2053ce)
+
+[CLA tx](https://sepolia.etherscan.io/tx/0x6785d31e107c10a16501bd6072cd505d1c703166373c587e3bf4f1a8430815e0)
+
+[CLF tx](https://functions.chain.link/sepolia/4467#/side-drawer/request/0xf01d80519c4b720db876d296dd023948415d5b8afd74c645da167d05f714bcc9)

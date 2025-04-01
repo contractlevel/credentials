@@ -31,7 +31,7 @@ contract LevelDID is ERC721, Ownable, ILevelDID {
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
-    event DIDMinted(address indexed to, uint256 indexed tokenId, string did);
+    event DIDMinted(address indexed to, uint256 indexed tokenId, string didPublicKey);
 
     /*//////////////////////////////////////////////////////////////
                               CONSTRUCTOR

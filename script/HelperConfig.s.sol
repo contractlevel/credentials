@@ -41,7 +41,7 @@ contract HelperConfig is Script {
             donId: 0x66756e2d657468657265756d2d7365706f6c69612d3100000000000000000000,
             clfSubId: 4467,
             donHostedSecretsSlotId: 0,
-            clfSecretsVersion: 1743081919 // needs to be replaced everytime functions/uploadSecrets.js is run
+            clfSecretsVersion: 1743515338 // needs to be replaced everytime functions/uploadSecrets.js is run
         });
     }
 }

@@ -49,8 +49,8 @@ contract FulfillRequestTest is BaseTest {
         }
 
         /// @dev params for handleOracleFulfillment call which leads to fulfillRequest
-        string memory cheqdDid = "did:cheqd:testnet:ad07d3f9-6e7c-4a97-83a0-2c794769f004";
-        bytes memory response = abi.encode(cheqdDid);
+        string memory cheqdDid = "test-string";
+        bytes memory response = bytes(cheqdDid);
         bytes memory err;
 
         vm.recordLogs();

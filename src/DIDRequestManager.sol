@@ -132,7 +132,8 @@ contract DIDRequestManager is CompliantLogic, FunctionsClient {
             // handle response from Cheqd API to mint LevelDID NFT
             address user = s_requestIdToUser[requestId];
 
-            string memory did = abi.decode(response, (string));
+            // string memory did = abi.decode(response, (string));
+            string memory did = string(response);
 
             ILevelDID(i_levelDID).mintDID(user, did);
         }
