@@ -20,6 +20,7 @@ contract BaseTest is Test {
                                VARIABLES
     //////////////////////////////////////////////////////////////*/
     uint256 public constant USER_LINK_BALANCE = 100 * 1e18;
+    string public constant DID_IDENTIFIER = "did:cheqd:testnet:134617bb-aa23-4356-b4e0-57c46fad88cb";
 
     uint256 public ethSepoliaFork;
 

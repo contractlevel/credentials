@@ -16,7 +16,6 @@ contract LevelDID is ERC721, Ownable, ILevelDID {
     /*//////////////////////////////////////////////////////////////
                                  ERRORS
     //////////////////////////////////////////////////////////////*/
-    error LevelDID__SoulBound();
     error LevelDID__CanOnlyTransferBackToOriginalOwner();
 
     /*//////////////////////////////////////////////////////////////
@@ -26,8 +25,8 @@ contract LevelDID is ERC721, Ownable, ILevelDID {
     uint256 internal s_tokenIdCounter;
     /// @dev Track the original DID owner
     mapping(uint256 tokenId => address originalOwner) internal s_originalOwners;
-    /// @dev Track the DID associated with the tokenId
-    mapping(uint256 tokenId => string did) internal s_tokenDID;
+    /// @dev Track the DID public key associated with the tokenId
+    mapping(uint256 tokenId => string didPublicKey) internal s_tokenDID;
 
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
@@ -48,15 +47,15 @@ contract LevelDID is ERC721, Ownable, ILevelDID {
     /// @notice called by the DIDRequestManager via Chainlink Functions fulfillRequest() callback
     /// @notice mints a Level DID SBT to a compliant onchain actor
     /// @param to compliant user to mint to
-    /// @param did Cheqd DID identifier
-    function mintDID(address to, string memory did) external onlyOwner {
+    /// @param didPublicKey Public key associated with Cheqd DID
+    function mintDID(address to, string memory didPublicKey) external onlyOwner {
         uint256 tokenId = s_tokenIdCounter;
         s_tokenIdCounter += 1;
         s_originalOwners[tokenId] = to;
-        s_tokenDID[tokenId] = did;
+        s_tokenDID[tokenId] = didPublicKey;
 
         _safeMint(to, tokenId);
-        emit DIDMinted(to, tokenId, did);
+        emit DIDMinted(to, tokenId, didPublicKey);
     }
 
     /// @notice the original owner can transfer to any recipient, but that recipient can only transfer back to original owner

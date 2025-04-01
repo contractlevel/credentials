@@ -13,11 +13,12 @@ contract RequestCompliantStatusTest is BaseTest {
         LinkTokenInterface(link).approve(address(manager), fee);
         uint256 linkBalanceBefore = LinkTokenInterface(link).balanceOf(user);
 
-        manager.requestCompliantStatus();
+        manager.requestCompliantStatus(DID_IDENTIFIER);
         vm.stopPrank();
 
         uint256 linkBalanceAfter = LinkTokenInterface(link).balanceOf(user);
 
         assertEq(linkBalanceAfter, linkBalanceBefore - fee);
+        assertEq(manager.getDidToUser(user), DID_IDENTIFIER);
     }
 }

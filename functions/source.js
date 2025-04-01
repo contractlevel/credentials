@@ -1,25 +1,21 @@
-async function main(s) {
+// This source code has been written to be as compact as possible since it is stored in the bytecode of DIDRequestManager
+async function main(a, s) {
   try {
-    const k = s['apiKey'];
-    if (!k) throw 'Missing key';
-    const r = Functions.makeHttpRequest({
-      url: 'https://studio-api.cheqd.net/did/create',
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'x-api-key': k,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      data: 'network=testnet&identifierFormatType=uuid&verificationMethodType=Ed25519VerificationKey2018&service=&key=&%40context=',
+    let d = a[0];
+    if (!d) throw 'M';
+    let k = s.apiKey;
+    if (!k) throw 'K';
+    let r = await Functions.makeHttpRequest({
+      url: `https://studio-api.cheqd.net/did/search/${d}`,
+      method: 'GET',
+      headers: { accept: 'application/json', 'x-api-key': k },
     });
-    const res = await r;
-    if (!res) throw 'Request failed';
-    if (res.error) throw res.data.error || 'API error';
-    const d = res.data.did;
-    if (!d) throw 'No DID';
-    return Functions.encodeString(d);
+    if (r.error) throw r.data.error || 'E';
+    let p = r.data.didDocument.verificationMethod[0].publicKeyBase58;
+    if (!p) throw 'P';
+    return Functions.encodeString(p);
   } catch (e) {
-    return Functions.encodeString(`Error: ${e}`);
+    return Functions.encodeString(`E:${e}`);
   }
 }
-return main(secrets);
+return main(args, secrets);

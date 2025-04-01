@@ -26,3 +26,11 @@ Run unit tests with:
 ```
 forge test --mt test_did
 ```
+
+## Deployments (Eth Sepolia)
+
+[DIDRequestManager](https://sepolia.etherscan.io/address/0x3fad1b42b710ee9ECe30cdBC900Fd095366579cE#code)
+
+[LevelDID](https://sepolia.etherscan.io/address/0xE4C1292B13CF51B0ce678195E8069f2F3AF56ea7#code)
+
+[requestCompliantStatus tx](https://sepolia.etherscan.io/tx/0x72e617d53c64dca754cb2dfc8e3e1d62b896c44c326691f6aec35d8ad691f176)

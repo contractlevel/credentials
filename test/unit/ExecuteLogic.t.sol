@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.24;
 
-import {BaseTest, Vm} from "../BaseTest.t.sol";
+import {BaseTest, Vm, console2} from "../BaseTest.t.sol";
 
 contract ExecuteLogicTest is BaseTest {
     /// @notice the functions/uploadSecrets.js script will have to be run before this test if the DON-hosted secret has expired
@@ -30,5 +30,25 @@ contract ExecuteLogicTest is BaseTest {
     function test_did_executeLogic_revertsWhen_notClcRouter() public {
         vm.expectRevert(abi.encodeWithSignature("CompliantLogic__OnlyCompliantRouter()"));
         manager.executeLogic(user);
+    }
+
+    function test_did_executeLogic_gasCost() public {
+        // Arrange: Impersonate the clcRouter address to satisfy access control
+        vm.prank(address(clcRouter));
+
+        // Start gas measurement
+        uint256 startGas = gasleft();
+
+        // Act: Call executeLogic with the user address
+        manager.executeLogic(user);
+
+        // End gas measurement
+        uint256 endGas = gasleft();
+
+        // Calculate gas used
+        uint256 gasUsed = startGas - endGas;
+
+        // Log the gas usage for review
+        console2.log("Gas used by executeLogic:", gasUsed); // 287_068
     }
 }

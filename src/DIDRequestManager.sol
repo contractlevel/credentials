@@ -22,7 +22,7 @@ contract DIDRequestManager is CompliantLogic, FunctionsClient {
     //////////////////////////////////////////////////////////////*/
     uint32 internal constant CLF_GAS_LIMIT = 300_000;
     string internal constant SOURCE =
-        "async function main(s){try{const k=s['apiKey'];if(!k)throw'Missing key';const r=Functions.makeHttpRequest({url:'https://studio-api.cheqd.net/did/create',method:'POST',headers:{'accept':'application/json','x-api-key':k,'Content-Type':'application/x-www-form-urlencoded'},data:'network=testnet&identifierFormatType=uuid&verificationMethodType=Ed25519VerificationKey2018&service=&key=&%40context='});const res=await r;if(!res)throw'Request failed';if(res.error)throw res.data.error||'API error';const d=res.data.did;if(!d)throw'No DID';return Functions.encodeString(d)}catch(e){return Functions.encodeString(`Error: ${e}`)}}return main(secrets);";
+        "async function main(a,s){try{let d=a[0];if(!d)throw'M';let k=s.apiKey;if(!k)throw'K';let r=await Functions.makeHttpRequest({url:`https://studio-api.cheqd.net/did/search/${d}`,method:'GET',headers:{accept:'application/json','x-api-key':k}});if(r.error)throw r.data.error||'E';let p=r.data.didDocument.verificationMethod[0].publicKeyBase58;if(!p)throw'P';return Functions.encodeString(p)}catch(e){return Functions.encodeString(`E:${e}`)}}return main(args,secrets)";
 
     /// @dev Level DID NFT contract native to this project
     address internal immutable i_levelDID;
@@ -39,6 +39,8 @@ contract DIDRequestManager is CompliantLogic, FunctionsClient {
 
     /// @notice user to CLF RequestID
     mapping(bytes32 requestId => address user) internal s_requestIdToUser;
+    /// @notice DID to retrieve data about for the user
+    mapping(address user => string did) internal s_userToDid;
 
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
@@ -74,7 +76,10 @@ contract DIDRequestManager is CompliantLogic, FunctionsClient {
     // @review - could just change this to ERC677Receiver.onTokenTransfer......
     /// @notice This function calls the CLCRouter to request the compliant status of a user
     /// @notice Users must LINK.approve(address(this), CLCRouter.getFee()) before calling this function
-    function requestCompliantStatus() external {
+    /// @param did string identifier for Cheqd DID to retrieve info about if user is compliant
+    function requestCompliantStatus(string memory did) external {
+        s_userToDid[msg.sender] = did;
+
         /// @review - need to account for CLF cost and take that from user, adding it to clf subscription
         /// not totally important at this stage, but should be considered
 
@@ -100,7 +105,12 @@ contract DIDRequestManager is CompliantLogic, FunctionsClient {
     /// @param user The user who has been verified as compliant
     /// @notice This function will call the Cheqd API through Chainlink Functions
     function _executeLogic(address user) internal override {
+        string memory did = s_userToDid[user];
+        string[] memory args = new string[](1);
+        args[0] = did;
+
         FunctionsRequest.Request memory req;
+        req.setArgs(args);
         req.initializeRequestForInlineJavaScript(SOURCE);
         req.addDONHostedSecrets(i_donHostedSecretsSlotId, i_clfSecretsVersion);
 
@@ -157,5 +167,9 @@ contract DIDRequestManager is CompliantLogic, FunctionsClient {
 
     function getRequestIdToUser(bytes32 requestId) external view returns (address) {
         return s_requestIdToUser[requestId];
+    }
+
+    function getDidToUser(address user) external view returns (string memory) {
+        return s_userToDid[user];
     }
 }
