@@ -1,6 +1,24 @@
-# Contract Level DID
+# Contract Level Credentials
 
-This project is an entry for the [Cheqd Verifiable AI Hackathon 2025](https://dorahacks.io/hackathon/cheqd-verifiable-ai/ideaism), and demonstrates how to mint an onchain DID (Decentralized Identifier) with [Cheqd](https://docs.cheqd.io/product/studio/dids/create-did) through [Chainlink Functions](https://chain.link/functions) for users who have completed Sybil-resistant KYC with a licensed entity through [Contract Level Compliance](https://github.com/contractlevel/compliance).
+This project is an entry for the [Cheqd Verifiable AI Hackathon 2025](https://dorahacks.io/hackathon/cheqd-verifiable-ai/ideaism), and demonstrates how to mint an onchain credential linked to a [Cheqd DID](https://docs.cheqd.io/product/studio/dids/create-did) through [Chainlink Functions](https://chain.link/functions) for users who have completed Sybil-resistant KYC with a licensed entity through [Contract Level Compliance](https://github.com/contractlevel/compliance).
+
+## Table of Contents
+
+- [Contract Level Credentials](#contract-level-credentials)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Chainlink Functions Secrets](#chainlink-functions-secrets)
+  - [Usage](#usage)
+  - [Testing](#testing)
+  - [Deployments (Eth Sepolia)](#deployments-eth-sepolia)
+
+## Overview
+
+Users who want to mint a Contract Level Credential must pass a `cheqd did identifier string` to the `DIDRequestManager` contract, and pay in `LINK`. The Contract Level infrastructure then checks if the user has completed Sybil-resistant KYC with a licensed entity. If the user's compliant status has been confirmed, a call is made to the Cheqd API, via Chainlink Functions, to fetch publicKey data about the user's passed `cheqd did`. The Chainlink Functions callback will then mint a Contract Level Credential (see `LevelDID` contract) to the user.
+
+Contract Level Credentials are "semi-soulbound" NFTs, with data fetched from the Cheqd API saved in contract storage. Cheqd DID public key owners can then sign a message of confirmation, linking their Cheqd DID to their Contract Level Credential.
+
+Contract Level Credentials are "semi-soulbound" because they can be transferred for use in onchain applications, but can only be transferred back to the original owner.
 
 ## Chainlink Functions Secrets
 

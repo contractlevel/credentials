@@ -1,0 +1,5 @@
+@contractlevel/compliance=lib/compliance
+@chainlink/contracts=lib/compliance/lib/chainlink/contracts
+@openzeppelin/contracts=lib/compliance/lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts
+@everest/contracts=lib/compliance/lib/everest-chainlink-consumer/contracts
+@openzeppelin/contracts-upgradeable=lib/compliance/lib/openzeppelin-contracts-upgradeable/contracts
