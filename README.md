@@ -7,7 +7,7 @@ This project is an entry for the [Cheqd Verifiable AI Hackathon 2025](https://do
 - [Contract Level Credentials](#contract-level-credentials)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
-  - [Chainlink Functions Secrets](#chainlink-functions-secrets)
+  - [Chainlink Functions](#chainlink-functions)
   - [Usage](#usage)
   - [Testing](#testing)
   - [Deployments (Eth Sepolia)](#deployments-eth-sepolia)
@@ -20,7 +20,9 @@ Contract Level Credentials are "semi-soulbound" NFTs, with data fetched from the
 
 Contract Level Credentials are "semi-soulbound" because they can be transferred for use in onchain applications, but can only be transferred back to the original owner.
 
-## Chainlink Functions Secrets
+## Chainlink Functions
+
+The code that is run by the Chainlink Functions DON to call the Cheqd API and handle the response can be found in `functions/source.js`. A condensed equivalent of this is stored as a constant in the `DIDRequestManager` contract (to save on gas).
 
 The following will upload the `CHEQD_API_KEY` in a `.env` file, that will be hosted by the DON for 24 hours.
 
